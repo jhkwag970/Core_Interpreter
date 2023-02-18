@@ -29,4 +29,7 @@ void record(char* lhs, char* rhs);
 
 void allocateRecord(char* iden, int size);
 
+void printIntSize();
+void printRecSize();
+
 #endif

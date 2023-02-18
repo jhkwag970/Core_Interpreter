@@ -32,7 +32,8 @@ static int recSize;
 // If iden is an integer, return the index. Otherwise, return -1
 static int searchInteger(char* iden){
 	int location = -1;
-	for (int i=0; i<intSize; i++) {
+	int i;
+	for (i=0; i<intSize; i++) {
 		if (strcmp(intArray[i], iden)==0) {
 			location = i;
 		}
@@ -42,7 +43,8 @@ static int searchInteger(char* iden){
 
 static int searchRecord(char* iden){
 	int location = -1;
-	for (int i=0; i<recSize; i++) {
+	int i;
+	for (i=0; i<recSize; i++) {
 		if (strcmp(recArray[i], iden)==0) {
 			location = i;
 		}
@@ -83,32 +85,59 @@ void declare(char* iden, int type) {
 
 // Store a value to a variable. Remember, unindexed stores to a record go to index 0
 void store(char* iden, int value) {
-
+	int idx = searchInteger(iden);
+	intValues[idx] = value;
 }
 
 // Read a value from a variable. Remember, unindexed reads from a record read index 0
 int recall(char* iden) {
-
+	int idx = searchInteger(iden);
+	return intValues[idx];
 }
 
 // Store a value to a record variable, at the given index
 void storeRec(char* iden, int index, int value) {
-
+	//Search iden idx
+		//if iden idx == -1 error non existing var
+	//check recValues[iden idx]
+		//if recValues[iden idx] == NULL   error uninitialization error
+	//check iden size in recValues[iden idx][0]	
+		//if iden size == index error ouside of array size
+	//else
+	//index++;
+	//recValues[iden idx][index] = value
 }
 
 // Read a value from a record variable, from the given index
 int recallRec(char* iden, int index) {
-
+	//Search iden idx
+		//if iden idx == -1 error non existing var
+	//check recValues[iden idx]
+		//if recValues[iden idx] == NULL   error uninitialization error
+	//check iden size in recValues[iden idx][0]	
+		//if iden size == index error ouside of array size
+	//else
+	//index++;
+	//return recValuse[iden idx][index]
 }
 
 // Handle "id := record id" type assignment
 void record(char* lhs, char* rhs) {
-
+	//search lhs idx
+		//if lhs idx == -1 error non existing var
+	//search rhs idx
+		//if rhs idx == -1 error non existing var
+	//check rhs Size in recValues[rhs idx]
+		//if 0 error uninitialization error
+	//recValues[lhs idx] = recValues[rhs idx]
 }
 
 // Handle "id := new record[<expr>]" type assignment
 void allocateRecord(char* iden, int size) {
-	
+	//search iden idx
+		//if iden idx == -1 error non existing var
+	//recValue[iden idx] = calloc (size+1)
+	//recValue[iden idx][0] = size
 }
 
 
@@ -150,4 +179,12 @@ void printRecValues(){
 		}printf("\n");
 	}
 
+}
+
+void printIntSize(){
+	printf("%d\n", intSize);
+}
+
+void printRecSize(){
+	printf("%d\n", recSize);
 }

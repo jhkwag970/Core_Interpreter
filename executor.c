@@ -22,10 +22,10 @@ void executeAssign(struct nodeAssign *ass2);
 void executeIf(struct nodeIf *i2);
 void executeLoop(struct nodeLoop *lp2);
 void executeOut(struct nodeOut *out2);
-void executeIndex(struct nodeIndex *idx2);
-void executeExpr(struct nodeExpr *exp2);
-void executeTerm(struct nodeTerm *tm2);
-void executeFactor(struct nodeFactor *fac2);
+int executeIndex(struct nodeIndex *idx2);
+int executeExpr(struct nodeExpr *exp2);
+int executeTerm(struct nodeTerm *tm2);
+int executeFactor(struct nodeFactor *fac2);
 void executeCond(struct nodeCond *c2);
 void executeCmpr(struct nodeCmpr *cmp2);
 
@@ -58,9 +58,8 @@ void executeProcedure(){
 
 	executeDeclSeq(p->ds);
 	memory_init();
-	printIntValues();
-	//printRecValues();
 	executeStmtSeq(p->ss);
+	printIntValues();
 }
 
 
@@ -119,9 +118,15 @@ void executeStmt(struct nodeStmt *s2){
 void executeAssign(struct nodeAssign *ass2){
 	//printf("%s", ass2->id);
 	if(ass2->idx != NULL){
-		executeIndex(ass2->idx);
+		int idx = executeIndex(ass2->idx);
 		//printf(":=");
-		executeExpr(ass2->exp);
+		int value = executeExpr(ass2->exp);
+		if(idx == -1){
+			//id:=<expr>
+			store(ass2->id, value);
+		}else{
+			//id[idx]:=<expr>
+		}
 	}else if(ass2->exp != NULL){
 		//printf(":=new record[");
 		executeExpr(ass2->exp);
@@ -134,21 +139,29 @@ void executeAssign(struct nodeAssign *ass2){
 
 }
 
-void executeIndex(struct nodeIndex *idx2){
+int executeIndex(struct nodeIndex *idx2){
+	int idx = -1;
 	if(idx2->exp != NULL){
 		//printf("[");
-		executeExpr(idx2->exp);
+		idx = executeExpr(idx2->exp);
 		//printf("]");
 	}
+	return idx;
 }
 
 void executeIf(struct nodeIf *i2){
+	//if executeCond 
+	//	executeStmtSeq
+
 	//printf("if ");
 	executeCond(i2->c);
 	//printf(" then\n");
 	executeStmtSeq(i2->ss);
 
 	if(i2->ss2 != NULL){
+		//if (!executeCond)
+		//	executeStmtSeq
+
 		//printf("else\n");
 		executeStmtSeq(i2->ss2);
 	}
@@ -184,6 +197,10 @@ void executeCmpr(struct nodeCmpr *cmp2){
 }
 
 void executeLoop(struct nodeLoop *lp2){
+	//while (executeCond)
+	//	executeStmtSeq
+
+
 	//printf("while ");
 	executeCond(lp2->c);
 	//printf(" do\n");
@@ -197,8 +214,8 @@ void executeOut(struct nodeOut *out2){
 	//printf(");\n");
 }
 
-void executeExpr(struct nodeExpr *exp2){
-	executeTerm(exp2->tm);
+int executeExpr(struct nodeExpr *exp2){
+	int value = executeTerm(exp2->tm);
 
 	if(exp2->math != NULL){
 		if(!strcmp(exp2->math, "+")){
@@ -208,7 +225,7 @@ void executeExpr(struct nodeExpr *exp2){
 		}
 		executeExpr(exp2->exp);
 	}
-
+	return value;
 }
 
 int executeTerm(struct nodeTerm *tm2){
