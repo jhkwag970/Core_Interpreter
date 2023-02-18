@@ -1,11 +1,21 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
+void initializeSize();
+
 void memory_init();
 
 void memory_free();
 
 void declare(char* iden, int type);
+
+void printInt();
+
+void printRec();
+
+void printIntValues();
+
+void printRecValues();
 
 void store(char* iden, int value);
 

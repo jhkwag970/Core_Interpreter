@@ -4,11 +4,12 @@
 #include <stdio.h>
 
 #include "parser.h"
-#include "printer.h"
+#include "executor.h"
 
 int main(int argc, char *argv[]) {  
 
-  scanner(argv[1]);
+  scanner("Correct/test.code");
+  executeTree();
   //printTree();
 
   return 0;

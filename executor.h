@@ -9,6 +9,6 @@
 *
 */
 
-void printTree();
+void executeTree();
 
 #endif
