@@ -247,16 +247,21 @@ int executeFactor(struct nodeFactor *fac2){
 	if(fac2->id != NULL){
 		//printf("%s", fac2->id);
 		if(fac2->exp != NULL){
+			// id[expr]
 			//printf("[");
-			executeExpr(fac2->exp);
+			int idx = executeExpr(fac2->exp);
 			//printf("]");
+			
+		}else{
+			// id
+			value = recall(fac2->id);
 		}
 	}else if(fac2->cnt != -1){
 		//printf("%d", fac2->cnt);
 		value=fac2->cnt;
 	}else if(fac2->exp != NULL){
 		//printf("(");
-		executeExpr(fac2->exp);
+		value = executeExpr(fac2->exp);
 		//printf(")");
 	}else{
 		//printf("in()");
