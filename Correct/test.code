@@ -1,5 +1,7 @@
 procedure c1 is
 	record x;
+	record y;
 begin
 	x:=new record[3*2-1*2];
+	y:=record x;
 end

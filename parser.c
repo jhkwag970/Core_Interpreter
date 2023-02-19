@@ -332,7 +332,7 @@ void parseAssign(struct nodeAssign *ass2){
 			varRecChecker(value2);
 			
 			ass2->id2=(char*) calloc(10, sizeof(char));
-			strcpy(ass2->id2, value);
+			strcpy(ass2->id2, value2);
 			
 			//Semi-colon
 			nextToken();

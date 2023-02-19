@@ -99,10 +99,12 @@ int recall(char* iden) {
 void storeRec(char* iden, int index, int value) {
 	//Search iden idx
 		//if iden idx == -1 error non existing var
+	//check index 
+	//	if index < 0 error index must be Natural number
 	//check recValues[iden idx]
 		//if recValues[iden idx] == NULL   error uninitialization error
 	//check iden size in recValues[iden idx][0]	
-		//if iden size == index error ouside of array size
+		//if recValues[iden idx][0]	 == index error ouside of array size
 	//else
 	//index++;
 	//recValues[iden idx][index] = value
@@ -112,10 +114,12 @@ void storeRec(char* iden, int index, int value) {
 int recallRec(char* iden, int index) {
 	//Search iden idx
 		//if iden idx == -1 error non existing var
+	//check index 
+	//	if index < 0 error index must be Natural number
 	//check recValues[iden idx]
 		//if recValues[iden idx] == NULL   error uninitialization error
 	//check iden size in recValues[iden idx][0]	
-		//if iden size == index error ouside of array size
+		//if recValues[iden idx][0] == index error ouside of array size
 	//else
 	//index++;
 	//return recValuse[iden idx][index]
@@ -127,9 +131,25 @@ void record(char* lhs, char* rhs) {
 		//if lhs idx == -1 error non existing var
 	//search rhs idx
 		//if rhs idx == -1 error non existing var
-	//check rhs Size in recValues[rhs idx]
-		//if 0 error uninitialization error
+	//check recValues[rhs idx]
+		//if recValues[rhs idx] == NULL   error uninitialization error
 	//recValues[lhs idx] = recValues[rhs idx]
+	int lhs_idx = searchRecord(lhs);
+	int rhs_idx = searchRecord(rhs);
+	if(lhs_idx == -1){
+		printf("Error: Record %s has not been declared\n", lhs);
+		exit(0);
+	}
+	if(rhs_idx == -1){
+		printf("Error: Record %s has not been declared\n", rhs);
+		exit(0);
+	}
+	if(recValues[rhs_idx] == NULL){
+		printf("Error: Record %s has not been initialized\n", rhs);
+		exit(0);
+	}
+
+	recValues[lhs_idx]=recValues[rhs_idx];
 }
 
 // Handle "id := new record[<expr>]" type assignment
@@ -141,7 +161,7 @@ void allocateRecord(char* iden, int size) {
 
 	int idx = searchRecord(iden);
 	if(idx == -1){
-		printf("Error: Record variable has not declared\n");
+		printf("Error: Record variable has not been declared\n");
 		exit(0);
 	}
 	if(size < 1){

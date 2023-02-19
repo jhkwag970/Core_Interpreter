@@ -128,13 +128,14 @@ void executeAssign(struct nodeAssign *ass2){
 		}else{
 			//id[idx]:=<expr>
 		}
-	}else if(ass2->exp != NULL){
+	}else if(ass2->exp != NULL){ //(x)
 		//printf(":=new record[");
 		int size = executeExpr(ass2->exp);
 		//printf("]");
 		allocateRecord(ass2->id, size);
-	}else if(ass2->id2 != NULL){
+	}else if(ass2->id2 != NULL){ 
 		//printf(":=record %s", ass2->id2);
+		record(ass2->id, ass2->id2);
 	}	
 	//printf(";\n");
 
