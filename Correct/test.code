@@ -1,5 +1,5 @@
 procedure c1 is
 	record x;
 begin
-	x:=new record[3];
+	x:=new record[3*2-1*2];
 end

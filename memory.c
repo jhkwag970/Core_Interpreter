@@ -144,6 +144,10 @@ void allocateRecord(char* iden, int size) {
 		printf("Error: Record variable has not declared\n");
 		exit(0);
 	}
+	if(size < 1){
+		printf("Error: Size of Record must be greater than 0\n");
+		exit(0);
+	}
 	recValues[idx]=(int*) calloc(size+1,sizeof(int));
 	recValues[idx][0]=size;
 }
@@ -153,15 +157,17 @@ void allocateRecord(char* iden, int size) {
 
 void printInt(){
 	int i;
+	printf("Int variables: \n");
 	for(i=0; i< intSize;i++){
-		printf("Int Variable: %s\n", intArray[i]);
+		printf(" %s\n", intArray[i]);
 	}
 }
 
 void printRec(){
 	int i;
+	printf("Rec variables: \n");
 	for(i=0; i< recSize;i++){
-		printf("Rec Variable: %s\n", recArray[i]);
+		printf(" %s\n", recArray[i]);
 	}
 }
 
