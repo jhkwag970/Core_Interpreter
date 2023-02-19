@@ -85,8 +85,23 @@ void declare(char* iden, int type) {
 
 // Store a value to a variable. Remember, unindexed stores to a record go to index 0
 void store(char* iden, int value) {
-	int idx = searchInteger(iden);
-	intValues[idx] = value;
+	int int_idx = searchInteger(iden);
+	int rec_idx = searchRecord(iden);
+
+	if(int_idx == -1 && rec_idx == -1){
+		printf("Error: varialbe %s has not been declared\n", iden);
+		exit(0);
+	}
+	if(int_idx != -1){
+		intValues[int_idx] = value;
+	}
+	if(rec_idx != -1){
+		if(recValues[rec_idx] == NULL){
+			printf("Error: Record %s has not been initialized\n", iden);
+			exit(0);
+		}	
+		recValues[rec_idx][1] = value;
+	}
 }
 
 // Read a value from a variable. Remember, unindexed reads from a record read index 0
@@ -103,6 +118,10 @@ int recall(char* iden) {
 		value = intValues[int_idx];
 	}
 	if(rec_idx != -1){
+		if(recValues[rec_idx] == NULL){
+			printf("Error: Record %s has not been initialized\n", iden);
+			exit(0);
+		}	
 		value = recValues[rec_idx][1];
 	}
 

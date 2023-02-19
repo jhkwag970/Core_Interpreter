@@ -28,7 +28,7 @@ int executeIndex(struct nodeIndex *idx2);
 int executeExpr(struct nodeExpr *exp2);
 int executeTerm(struct nodeTerm *tm2);
 int executeFactor(struct nodeFactor *fac2);
-void executeCond(struct nodeCond *c2);
+int executeCond(struct nodeCond *c2);
 int executeCmpr(struct nodeCmpr *cmp2);
 
 extern struct nodeProcedure *p;
@@ -160,43 +160,64 @@ int executeIndex(struct nodeIndex *idx2){
 	return idx;
 }
 
+//(X)
 void executeIf(struct nodeIf *i2){
 	//if executeCond 
 	//	executeStmtSeq
 
 	//printf("if ");
-	executeCond(i2->c);
 	//printf(" then\n");
-	executeStmtSeq(i2->ss);
+	int cond = executeCond(i2->c);
+	if (cond){
+		executeStmtSeq(i2->ss);
+	}
 
+	
 	if(i2->ss2 != NULL){
+		//printf("else\n");
+
 		//if (!executeCond)
 		//	executeStmtSeq
-
-		//printf("else\n");
-		executeStmtSeq(i2->ss2);
+		if(!cond){
+			executeStmtSeq(i2->ss2);
+		}
 	}
 	//printf("end\n");
 
 }
 
-void executeCond(struct nodeCond *c2){
+//(x)
+int executeCond(struct nodeCond *c2){
+	int boolean = 0;
 	if(c2->cmp !=NULL){
-		executeCmpr(c2->cmp);
+		boolean = executeCmpr(c2->cmp);
 		if(c2->c != NULL){
-			if(!strcmp(c2->sign, "or")){
-				//printf("or ");
-			}else if(!strcmp(c2->sign, "and")){
-				//printf("and ");
+			int rBoolean2 = executeCond(c2->c);
+			if(!strcmp(c2->sign, "OR")){
+				
+				if(boolean || rBoolean2){
+					boolean = 1;
+				}
+			}else if(!strcmp(c2->sign, "AND")){
+
+				if(boolean && rBoolean2){
+					boolean = 1;
+				}
 			}
-			executeCond(c2->c);
 		}
 	}else{
 		//printf("not ");
-		executeCond(c2->c);
+		boolean = executeCond(c2->c);
+		if(boolean){
+			boolean = 0;
+		}else{
+			boolean = 1;
+		}
 	}
+	return boolean;
 }
 
+//(x)
 int executeCmpr(struct nodeCmpr *cmp2){
 	int boolean = 0;
 	int lValue = executeExpr(cmp2->exp);
@@ -221,9 +242,11 @@ void executeLoop(struct nodeLoop *lp2){
 
 
 	//printf("while ");
-	executeCond(lp2->c);
+	while(executeCond(lp2->c)){
+		executeStmtSeq(lp2->ss);
+	}
 	//printf(" do\n");
-	executeStmtSeq(lp2->ss);
+	
 	//printf("end\n");
 }
 
