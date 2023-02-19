@@ -138,11 +138,15 @@ void allocateRecord(char* iden, int size) {
 		//if iden idx == -1 error non existing var
 	//recValue[iden idx] = calloc (size+1)
 	//recValue[iden idx][0] = size
+
+	int idx = searchRecord(iden);
+	if(idx == -1){
+		printf("Error: Record variable has not declared\n");
+		exit(0);
+	}
+	recValues[idx]=(int*) calloc(size+1,sizeof(int));
+	recValues[idx][0]=size;
 }
-
-
-
-
 
 //print variables and its values
 
@@ -172,9 +176,9 @@ void printRecValues(){
 	int i, j;
 	for(i=0; i<recSize;i++){
 		printf("Rec: %s\n", recArray[i]);
-		int arraySize = recArray[i][0];
+		int arraySize = recValues[i][0];
 		printf("Values: ");
-		for(j=1; j<arraySize;j++){
+		for(j=0; j<=arraySize;j++){
 			printf("%d, ", recValues[i][j]);
 		}printf("\n");
 	}

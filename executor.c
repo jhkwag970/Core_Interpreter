@@ -59,7 +59,8 @@ void executeProcedure(){
 	executeDeclSeq(p->ds);
 	memory_init();
 	executeStmtSeq(p->ss);
-	printIntValues();
+	//printIntValues();
+	printRecValues();
 }
 
 
@@ -121,7 +122,7 @@ void executeAssign(struct nodeAssign *ass2){
 		int idx = executeIndex(ass2->idx);
 		//printf(":=");
 		int value = executeExpr(ass2->exp);
-		if(idx == -1){
+		if(idx == -1){  //(x)
 			//id:=<expr>
 			store(ass2->id, value);
 		}else{
@@ -129,9 +130,9 @@ void executeAssign(struct nodeAssign *ass2){
 		}
 	}else if(ass2->exp != NULL){
 		//printf(":=new record[");
-		executeExpr(ass2->exp);
+		int size = executeExpr(ass2->exp);
 		//printf("]");
-		
+		allocateRecord(ass2->id, size);
 	}else if(ass2->id2 != NULL){
 		//printf(":=record %s", ass2->id2);
 	}	
@@ -208,12 +209,16 @@ void executeLoop(struct nodeLoop *lp2){
 	//printf("end\n");
 }
 
+
+//(x)
 void executeOut(struct nodeOut *out2){
 	//printf("out(");
-	executeExpr(out2->exp);
+	int value = executeExpr(out2->exp);
+	printf("%d\n", value);
 	//printf(");\n");
 }
 
+//(x)
 int executeExpr(struct nodeExpr *exp2){
 	int value = executeTerm(exp2->tm);
 
@@ -231,6 +236,7 @@ int executeExpr(struct nodeExpr *exp2){
 	return value;
 }
 
+//(x)
 int executeTerm(struct nodeTerm *tm2){
 	int value = executeFactor(tm2->fac);
 	
@@ -257,15 +263,15 @@ int executeFactor(struct nodeFactor *fac2){
 			int idx = executeExpr(fac2->exp);
 			//printf("]");
 			
-		}else{
-			// id (x)
+		}else{            //(x)
+			// id 
 			value = recall(fac2->id);
 		}
-	}else if(fac2->cnt != -1){
-		//printf("%d", fac2->cnt); (x)
+	}else if(fac2->cnt != -1){  //(x)
+		//printf("%d", fac2->cnt); 
 		value=fac2->cnt;
-	}else if(fac2->exp != NULL){
-		//printf("("); (x)
+	}else if(fac2->exp != NULL){   //(x)
+		//printf("("); 
 		value = executeExpr(fac2->exp);
 		//printf(")");
 	}else{

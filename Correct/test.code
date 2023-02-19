@@ -1,5 +1,5 @@
 procedure c1 is
-	integer x;
+	record x;
 begin
-	x:=(1-1)+5;
+	x:=new record[3];
 end
