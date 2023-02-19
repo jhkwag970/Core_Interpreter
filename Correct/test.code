@@ -1,12 +1,13 @@
 procedure c1 is
 	record x;
 	record y;
+	record h;
 	integer s;
 	integer k;
 begin
 	x:=new record[3];
 	x[0]:=0-3*2+1;
 	y:=record x;
-	s:=x[1];
+	s:=h[0];
 	k:=s-1;
 end

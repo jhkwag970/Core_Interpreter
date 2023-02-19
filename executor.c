@@ -267,7 +267,7 @@ int executeFactor(struct nodeFactor *fac2){
 			//printf("[");
 			int idx = executeExpr(fac2->exp);
 			//printf("]");
-			
+			value = recallRec(fac2->id, idx);
 		}else{            //(x)
 			// id 
 			value = recall(fac2->id);
