@@ -7,6 +7,6 @@ begin
 	x:=new record[3];
 	x[0]:=0-3*2+1;
 	y:=record x;
-	s:=x;
+	s:=x[1];
 	k:=s-1;
 end

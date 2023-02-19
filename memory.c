@@ -157,6 +157,25 @@ int recallRec(char* iden, int index) {
 	//else
 	//index++;
 	//return recValuse[iden idx][index]
+	int iden_idx = searchRecord(iden);
+	if(iden_idx == -1){
+		printf("Error: Record variable has not been declared\n");
+		exit(0);
+	}
+	if(index < 0){
+		printf("Error: Index must be natural number\n");
+		exit(0);
+	}
+	if(recValues[iden_idx] == NULL){
+		printf("Error: Record %s has not been initialized\n", iden);
+		exit(0);
+	}
+	if(recValues[iden_idx][0] == index){
+		printf("Error: Index out of range\n");
+		exit(0);
+	}
+	index++;
+	return recValues[iden_idx][index];
 }
 
 // Handle "id := record id" type assignment (x)
