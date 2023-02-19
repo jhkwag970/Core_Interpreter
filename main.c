@@ -9,7 +9,7 @@
 int main(int argc, char *argv[]) {  
 
   scanner("Correct/test.code");
-  executeTree();
+  executeTree("Correct/test.data");
   //printTree();
 
   return 0;

@@ -5,11 +5,13 @@
 
 #include "core.h"
 #include "tree.h"
-#include "executor.h"
+
+#include "scanner.h"
 #include "parser.h"
+#include "executor.h"
+
 #include "memory.h"
 
-#define TAB 4
 
 void executeProcedure();
 void executeDeclSeq(struct nodeDeclSeq *ds2);
@@ -50,9 +52,11 @@ static void indents(int indent) {
 *
 */
 
-void executeTree(){
+void executeTree(char* inputFile){
+	scanner_open(inputFile);
 	initializeSize();
 	executeProcedure();
+	scanner_close();
 }
 void executeProcedure(){
 
@@ -102,6 +106,7 @@ void executeStmtSeq(struct nodeStmtSeq *ss2){
 }
 
 void executeStmt(struct nodeStmt *s2){
+	// only in() case in executeFactor()
 	if(s2->ass != NULL){
 		executeAssign(s2->ass);
 	}
@@ -192,14 +197,22 @@ void executeCond(struct nodeCond *c2){
 	}
 }
 
-void executeCmpr(struct nodeCmpr *cmp2){
-	executeExpr(cmp2->exp);
+int executeCmpr(struct nodeCmpr *cmp2){
+	int boolean = 0;
+	int lValue = executeExpr(cmp2->exp);
+	int rValue = executeExpr(cmp2->exp2);
 	if(!strcmp(cmp2->sign, "=")){
 		//printf("=");
+		if(lValue == rValue){
+			boolean = 1;
+		}
 	}else if(!strcmp(cmp2->sign, "<")){
 		//printf("<");
+		if(lValue < rValue){
+			boolean = 1;
+		}
 	}
-	executeExpr(cmp2->exp2);
+	return boolean;
 }
 
 void executeLoop(struct nodeLoop *lp2){
@@ -258,11 +271,12 @@ int executeTerm(struct nodeTerm *tm2){
 	return value;
 }
 
+//(x)
 int executeFactor(struct nodeFactor *fac2){
 	int value;
 	if(fac2->id != NULL){
 		//printf("%s", fac2->id);
-		if(fac2->exp != NULL){
+		if(fac2->exp != NULL){ //(x)
 			// id[expr]
 			//printf("[");
 			int idx = executeExpr(fac2->exp);
@@ -281,6 +295,13 @@ int executeFactor(struct nodeFactor *fac2){
 		//printf(")");
 	}else{
 		//printf("in()");
+		int token = currentToken();
+		if(token == EOS){
+			printf("Error: Input File reached at the end of the line\n");
+			exit(0);
+		}
+		value = getConst();
+		nextToken();
 	}
 	return value;
 }

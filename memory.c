@@ -272,9 +272,9 @@ void printRecValues(){
 }
 
 void printIntSize(){
-	printf("%d\n", intSize);
+	printf("Number of Integers: %d\n", intSize);
 }
 
 void printRecSize(){
-	printf("%d\n", recSize);
+	printf("Number of Records: %d\n", recSize);
 }
