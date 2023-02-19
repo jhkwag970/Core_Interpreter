@@ -63,8 +63,8 @@ void executeProcedure(){
 	executeDeclSeq(p->ds);
 	memory_init();
 	executeStmtSeq(p->ss);
-	printIntValues();
-	printRecValues();
+	//printIntValues();
+	//printRecValues();
 }
 
 
@@ -288,6 +288,10 @@ int executeTerm(struct nodeTerm *tm2){
 			value = value * nextValue;
 		}else if(!strcmp(tm2->math, "/")){
 			//printf("/");
+			if(nextValue == 0){
+				printf("Error: Cannot divisible by 0\n");
+				exit(0);
+			}
 			value = value / nextValue;
 		}
 	}

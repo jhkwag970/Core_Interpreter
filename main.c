@@ -8,8 +8,8 @@
 
 int main(int argc, char *argv[]) {  
 
-  scanner("Correct/test.code");
-  executeTree("Correct/test.data");
+  scanner(argv[1]);
+  executeTree(argv[2]);
   //printTree();
 
   return 0;
