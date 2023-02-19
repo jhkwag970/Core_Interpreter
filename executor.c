@@ -29,7 +29,7 @@ int executeExpr(struct nodeExpr *exp2);
 int executeTerm(struct nodeTerm *tm2);
 int executeFactor(struct nodeFactor *fac2);
 void executeCond(struct nodeCond *c2);
-void executeCmpr(struct nodeCmpr *cmp2);
+int executeCmpr(struct nodeCmpr *cmp2);
 
 extern struct nodeProcedure *p;
 static int indentSize;
