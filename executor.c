@@ -59,7 +59,7 @@ void executeProcedure(){
 	executeDeclSeq(p->ds);
 	memory_init();
 	executeStmtSeq(p->ss);
-	//printIntValues();
+	printIntValues();
 	printRecValues();
 }
 
@@ -111,11 +111,13 @@ void executeStmt(struct nodeStmt *s2){
 	if(s2->lp != NULL){
 		executeLoop(s2->lp);
 	}
+	//(x)
 	if(s2->out != NULL){
 		executeOut(s2->out);
 	}
 }
 
+//(x)
 void executeAssign(struct nodeAssign *ass2){
 	//printf("%s", ass2->id);
 	if(ass2->idx != NULL){
@@ -125,15 +127,16 @@ void executeAssign(struct nodeAssign *ass2){
 		if(idx == -1){  //(x)
 			//id:=<expr>
 			store(ass2->id, value);
-		}else{
+		}else{ //(x)
 			//id[idx]:=<expr>
+			storeRec(ass2->id, idx, value);
 		}
 	}else if(ass2->exp != NULL){ //(x)
 		//printf(":=new record[");
 		int size = executeExpr(ass2->exp);
 		//printf("]");
 		allocateRecord(ass2->id, size);
-	}else if(ass2->id2 != NULL){ 
+	}else if(ass2->id2 != NULL){   //(x)
 		//printf(":=record %s", ass2->id2);
 		record(ass2->id, ass2->id2);
 	}	
@@ -141,6 +144,7 @@ void executeAssign(struct nodeAssign *ass2){
 
 }
 
+//(x)
 int executeIndex(struct nodeIndex *idx2){
 	int idx = -1;
 	if(idx2->exp != NULL){

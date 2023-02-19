@@ -91,8 +91,22 @@ void store(char* iden, int value) {
 
 // Read a value from a variable. Remember, unindexed reads from a record read index 0
 int recall(char* iden) {
-	int idx = searchInteger(iden);
-	return intValues[idx];
+	int value;
+	int int_idx = searchInteger(iden);
+	int rec_idx = searchRecord(iden);
+
+	if(int_idx == -1 && rec_idx == -1){
+		printf("Error: varialbe %s has not been declared\n", iden);
+		exit(0);
+	}
+	if(int_idx != -1){
+		value = intValues[int_idx];
+	}
+	if(rec_idx != -1){
+		value = recValues[rec_idx][1];
+	}
+
+	return value;
 }
 
 // Store a value to a record variable, at the given index
@@ -108,6 +122,26 @@ void storeRec(char* iden, int index, int value) {
 	//else
 	//index++;
 	//recValues[iden idx][index] = value
+	int iden_idx = searchRecord(iden);
+	if(iden_idx == -1){
+		printf("Error: Record variable has not been declared\n");
+		exit(0);
+	}
+	if(index < 0){
+		printf("Error: Index must be natural number\n");
+		exit(0);
+	}
+	if(recValues[iden_idx] == NULL){
+		printf("Error: Record %s has not been initialized\n", iden);
+		exit(0);
+	}
+	if(recValues[iden_idx][0] == index){
+		printf("Error: Index out of range\n");
+		exit(0);
+	}
+	index++;
+	recValues[iden_idx][index]=value;
+
 }
 
 // Read a value from a record variable, from the given index
@@ -125,7 +159,7 @@ int recallRec(char* iden, int index) {
 	//return recValuse[iden idx][index]
 }
 
-// Handle "id := record id" type assignment
+// Handle "id := record id" type assignment (x)
 void record(char* lhs, char* rhs) {
 	//search lhs idx
 		//if lhs idx == -1 error non existing var
@@ -152,7 +186,7 @@ void record(char* lhs, char* rhs) {
 	recValues[lhs_idx]=recValues[rhs_idx];
 }
 
-// Handle "id := new record[<expr>]" type assignment
+// Handle "id := new record[<expr>]" type assignment (x)
 void allocateRecord(char* iden, int size) {
 	//search iden idx
 		//if iden idx == -1 error non existing var
@@ -193,6 +227,7 @@ void printRec(){
 
 void printIntValues(){
 	int i;
+	printf("----------Integer Variables-----------------\n");
 	for(i=0; i< intSize;i++){
 		printf("Int: %s   Value: %d\n", intArray[i], intValues[i]);
 	}
@@ -200,8 +235,14 @@ void printIntValues(){
 
 void printRecValues(){
 	int i, j;
+	printf("----------Record Variables------------------\n");
 	for(i=0; i<recSize;i++){
 		printf("Rec: %s\n", recArray[i]);
+
+		if(recValues[i] == NULL){
+			continue;
+		}
+
 		int arraySize = recValues[i][0];
 		printf("Values: ");
 		for(j=0; j<=arraySize;j++){
