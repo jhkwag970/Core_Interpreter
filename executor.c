@@ -218,12 +218,15 @@ int executeExpr(struct nodeExpr *exp2){
 	int value = executeTerm(exp2->tm);
 
 	if(exp2->math != NULL){
+		int nextValue = executeExpr(exp2->exp);
 		if(!strcmp(exp2->math, "+")){
 			//printf("+");
+			value = value + nextValue;
 		}else if(!strcmp(exp2->math, "-")){
 			//printf("-");
+			value = value - nextValue;
 		}
-		executeExpr(exp2->exp);
+		
 	}
 	return value;
 }
@@ -232,12 +235,14 @@ int executeTerm(struct nodeTerm *tm2){
 	int value = executeFactor(tm2->fac);
 	
 	if(tm2->math != NULL){
+		int nextValue = executeTerm(tm2->tm);
 		if(!strcmp(tm2->math, "*")){
 			//printf("*");
+			value = value * nextValue;
 		}else if(!strcmp(tm2->math, "/")){
 			//printf("/");
+			value = value / nextValue;
 		}
-		executeTerm(tm2->tm);
 	}
 	return value;
 }
@@ -253,14 +258,14 @@ int executeFactor(struct nodeFactor *fac2){
 			//printf("]");
 			
 		}else{
-			// id
+			// id (x)
 			value = recall(fac2->id);
 		}
 	}else if(fac2->cnt != -1){
-		//printf("%d", fac2->cnt);
+		//printf("%d", fac2->cnt); (x)
 		value=fac2->cnt;
 	}else if(fac2->exp != NULL){
-		//printf("(");
+		//printf("("); (x)
 		value = executeExpr(fac2->exp);
 		//printf(")");
 	}else{
